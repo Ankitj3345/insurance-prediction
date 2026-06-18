@@ -56,41 +56,47 @@ elif page =='🤖 Insurance Prediction':
     bmi = st.number_input("Enter your bmi:", min_value=0.0, format="%.2f")
     if st.button("Predict"):
 
-      input_data = pd.DataFrame({
-        "age": [Age],
-        "sex":[Sex],
-        "bmi": [bmi],
-        "children": [children],
-        
-        "smoker":[Smoker],
-        "region":[Region],
+        input_data = pd.DataFrame({
+            "age": [Age],
+            "sex": [Sex],
+            "bmi": [bmi],
+            "children": [children],
+            "smoker": [Smoker],
+            "region": [Region]
+        })
 
-    })
-    input_data[["age"]] = Standard.transform(
-    input_data[["age"]])
-    input_data[["bmi"]] = Robust.transform(
-    input_data[["bmi"]])
-   
-    input_data[['region']]=input_data[['region']].replace({
-        'northwest':0,
-     'northeast':0,
-     'southeast':1,
-     'southwest':1
-    })
-    input_data['sex'] = input_data['sex'].map({
-    'female': 0,
-    'male': 1
-    })
+        input_data[["age"]] = Standard.transform(
+            input_data[["age"]]
+        )
 
-    input_data['smoker'] = input_data['smoker'].map({
-    'no': 0,
-    'yes': 1
-   })
-   
+        input_data[["bmi"]] = Robust.transform(
+            input_data[["bmi"]]
+        )
 
-    prediction = model.predict(input_data)
-    prediction = np.expm1(prediction)
-    st.success(f"Predicted Charge: ₹{prediction[0]:,.2f}")
+        input_data[['region']] = input_data[['region']].replace({
+            'northwest': 0,
+            'northeast': 0,
+            'southeast': 1,
+            'southwest': 1
+        })
+
+        input_data['sex'] = input_data['sex'].map({
+            'female': 0,
+            'male': 1
+        })
+
+        input_data['smoker'] = input_data['smoker'].map({
+            'no': 0,
+            'yes': 1
+        })
+
+        prediction = model.predict(input_data)
+
+        prediction = np.expm1(prediction)
+
+        st.success(
+            f"Predicted Charge: ₹{prediction[0]:,.2f}"
+        )
 elif page=='📉 Model Performance':
   st.title('Model performance')
   st.header('Linear Regression') 
